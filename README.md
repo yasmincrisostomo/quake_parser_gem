@@ -61,11 +61,11 @@ global_ranking: {
 
 The output contains the following keys:
 
-"game": This indicates the game number.
-"total_kills": This shows the total number of kills in the game.
-"players": This is an array of the player names that participated in the game.
-"kills": This is an object where each key is a player's name and the corresponding value is the number of kills that the player made. Negative values indicate that the player was killed by the world a certain number of times.
-"kills_by_means": This object has each method of killing as a key, and the corresponding value is the number of kills using that method.
+- "game": This indicates the game number.
+- "total_kills": This shows the total number of kills in the game.
+- "players": This is an array of the player names that participated in the game.
+- "kills": This is an object where each key is a player's name and the corresponding value is the number of kills that the player made. Negative values indicate that the player was killed by the world a certain number of times.
+- "kills_by_means": This object has each method of killing as a key, and the corresponding value is the number of kills using that method.
 
 ### Advanced Usage
 The quake_log_parser gem provides a variety of methods to further interact with and manipulate game data. Here are some of them:
@@ -75,27 +75,10 @@ The quake_log_parser gem provides a variety of methods to further interact with 
 - `increment_kill(killer, mod)`: Increments the kill count for a player.
 - `decrement_kill(killed, mod)`: Decrements the kill count for a player.
 
-#### **How it works**
-QuakeParser contains four main classes: QuakeParser, Game, Main, and Parser.
-
-QuakeParser acts as the entry point for the gem, with a single run method that takes a file path, creates a Main object, and calls its execute method.
-
-Main is responsible for creating a Parser object and calling its parse_file method. This will read the log file line by line, creating a new Game object for each match and collecting data on each kill. After the file has been parsed, Main will print out the data for each game, as well as a global player ranking.
-
-Game represents a single match. It keeps track of the total number of kills, the players involved, and how many kills each player made. It also records the cause of each death.
-
-Parser is responsible for reading the log file and interpreting each line. It identifies the start of each game, the information changes of each player, and each kill event. For each kill, it will update the relevant Game object with the killer, the killed, and the cause of death.
-
-#### **Log File Format**
-Log files have a specific structure with actions being logged as they occur. A typical kill action in the log file looks like this:
+### Running Tests
+To run the test suite, run the following command from the root directory of the project:
 
 ```
-2:22 Kill: 3 2 10: Isgalamido killed Dono da Bola by MOD_RAILGUN
-````
-
-The parts of this entry are:
-
-- 2:22: This is the timestamp of the action, represented as minutes:seconds.
-- Kill:: This signifies that the action being logged is a 'kill'.
-- 3 2 10:: These are IDs related to the kill action. The first number (3) is the ID of the killer, the second number (2) is the ID of the player who was killed, and the third number (10) is the ID of the cause of death.
-- Isgalamido killed Dono da Bola by MOD_RAILGUN: This is a descriptive sentence of the action that has occurred. It indicates that the player 'Isgalamido' killed the player 'Dono da Bola' using 'MOD_RAILGUN'.
+bundle exec rspec
+```
+------------------------------------------------------------------------------
