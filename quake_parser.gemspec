@@ -7,9 +7,11 @@ Gem::Specification.new do |spec|
   spec.email         = ['crisostomyasmin@gmail.com']
   spec.summary       = 'A gem for parsing Quake log files.'
   spec.description   = 'A gem that provides functionality to parse and analyze Quake log files.'
-  spec.homepage      = 'https://github.com/yasmincrisostomo/quake_log_parser'
+  spec.homepage      = 'https://github.com/yasmincrisostomo/quake_parser'
   spec.license       = 'MIT'
 
   spec.add_dependency 'json', '~> 2.5'
   spec.add_development_dependency 'rspec', '~> 3.0'
+
+  spec.files         = Dir["lib/**/*.rb"]
 end
