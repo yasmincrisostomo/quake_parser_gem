@@ -1,4 +1,4 @@
-# **Quake Log Parser**
+# **Quake Parser**
 
 ### **Overview:**
 QuakeParser is a ruby gem designed to parse Quake 3 Arena server log files and extract game data for further analysis.
@@ -68,7 +68,7 @@ The output contains the following keys:
 - "kills_by_means": This object has each method of killing as a key, and the corresponding value is the number of kills using that method.
 
 ### Advanced Usage
-The quake_log_parser gem provides a variety of methods to further interact with and manipulate game data. Here are some of them:
+The QuakeParser gem provides a variety of methods to further interact with and manipulate game data. Here are some of them:
 
 - `add_player(name)`: Adds a new player to the game.
 - `update_player_name(old_name, new_name)`: Updates a player's name.
