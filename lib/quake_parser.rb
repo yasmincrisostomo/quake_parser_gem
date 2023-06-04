@@ -1,8 +1,10 @@
-# frozen_string_literal: true
-
-require_relative "quake_parser/version"
+require_relative 'main'
+require_relative 'parser'
+require_relative 'game'
 
 module QuakeParser
-  class Error < StandardError; end
-  # Your code goes here...
+  def self.run(file_path)
+    main = QuakeParser::Main.new(file_path)
+    main.execute
+  end
 end
