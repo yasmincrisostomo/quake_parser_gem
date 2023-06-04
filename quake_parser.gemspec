@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'lib/quake_parser/version'
-
 Gem::Specification.new do |spec|
   spec.name          = 'quake_parser'
   spec.version       = '0.1.1'

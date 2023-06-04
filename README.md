@@ -1,39 +1,101 @@
-# QuakeParser
+# **Quake Log Parser**
 
-TODO: Delete this and the text below, and describe your gem
+### **Overview:**
+QuakeParser is a ruby gem designed to parse Quake 3 Arena server log files and extract game data for further analysis.
+This gem is designed to read a log file, group the game data of each match, collect kill data, generate a player ranking report, and generate a report of deaths grouped by death cause for each match.
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/quake_parser`. To experiment with that code, run `bin/console` for an interactive prompt.
+### **Installation:**
+To install the quake_parser gem, add the following line to your application's Gemfile:
+```
+gem 'quake_parser'
+```
+Then, execute:
+```
+bundle install
+```
+Or install it yourself as:
+```
+gem install quake_parser
+```
 
-## Installation
+### **Including the Gem in a Ruby Project:**
+Once you have the gem installed, you can include it in your Ruby project by simply requiring it at the top of your Ruby file(s):
+```
+require 'quake_log_parser'
+```
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
+### **Usage:**
+### Basic Usage
+To use QuakeParser, you'll need to supply it with a path to a log file:
+```
+require 'quake_parser'
 
-Install the gem and add to the application's Gemfile by executing:
+QuakeParser.run('path_to_your_log_file.log')
+```
 
-    $ bundle add UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
+This will read the log file and print out a report for each match, as well as a global player ranking. Here is an example of a typical output:
 
-If bundler is not being used to manage dependencies, install the gem by executing:
+```
+{
+  "game": 1,
+  "total_kills": 11,
+  "players": [
+    "Isgalamido",
+    "Mocinha"
+  ],
+  "kills": {
+    "Isgalamido": -3,
+    "Mocinha": 0
+  },
+  "kills_by_means": {
+    "MOD_TRIGGER_HURT": 7,
+    "MOD_ROCKET_SPLASH": 3,
+    "MOD_FALLING": 1
+  }
+}
+global_ranking: {
+  "Mocinha": 0,
+  "Isgalamido": -3
+}
+```
 
-    $ gem install UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
+The output contains the following keys:
 
-## Usage
+"game": This indicates the game number.
+"total_kills": This shows the total number of kills in the game.
+"players": This is an array of the player names that participated in the game.
+"kills": This is an object where each key is a player's name and the corresponding value is the number of kills that the player made. Negative values indicate that the player was killed by the world a certain number of times.
+"kills_by_means": This object has each method of killing as a key, and the corresponding value is the number of kills using that method.
 
-TODO: Write usage instructions here
+### Advanced Usage
+The quake_log_parser gem provides a variety of methods to further interact with and manipulate game data. Here are some of them:
 
-## Development
+- `add_player(name)`: Adds a new player to the game.
+- `update_player_name(old_name, new_name)`: Updates a player's name.
+- `increment_kill(killer, mod)`: Increments the kill count for a player.
+- `decrement_kill(killed, mod)`: Decrements the kill count for a player.
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+#### **How it works**
+QuakeParser contains four main classes: QuakeParser, Game, Main, and Parser.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+QuakeParser acts as the entry point for the gem, with a single run method that takes a file path, creates a Main object, and calls its execute method.
 
-## Contributing
+Main is responsible for creating a Parser object and calling its parse_file method. This will read the log file line by line, creating a new Game object for each match and collecting data on each kill. After the file has been parsed, Main will print out the data for each game, as well as a global player ranking.
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/quake_parser. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/quake_parser/blob/master/CODE_OF_CONDUCT.md).
+Game represents a single match. It keeps track of the total number of kills, the players involved, and how many kills each player made. It also records the cause of each death.
 
-## License
+Parser is responsible for reading the log file and interpreting each line. It identifies the start of each game, the information changes of each player, and each kill event. For each kill, it will update the relevant Game object with the killer, the killed, and the cause of death.
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+#### **Log File Format**
+Log files have a specific structure with actions being logged as they occur. A typical kill action in the log file looks like this:
 
-## Code of Conduct
+```
+2:22 Kill: 3 2 10: Isgalamido killed Dono da Bola by MOD_RAILGUN
+````
 
-Everyone interacting in the QuakeParser project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/quake_parser/blob/master/CODE_OF_CONDUCT.md).
+The parts of this entry are:
+
+- 2:22: This is the timestamp of the action, represented as minutes:seconds.
+- Kill:: This signifies that the action being logged is a 'kill'.
+- 3 2 10:: These are IDs related to the kill action. The first number (3) is the ID of the killer, the second number (2) is the ID of the player who was killed, and the third number (10) is the ID of the cause of death.
+- Isgalamido killed Dono da Bola by MOD_RAILGUN: This is a descriptive sentence of the action that has occurred. It indicates that the player 'Isgalamido' killed the player 'Dono da Bola' using 'MOD_RAILGUN'.
