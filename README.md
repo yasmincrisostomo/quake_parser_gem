@@ -21,7 +21,7 @@ gem install quake_parser
 ### **Including the Gem in a Ruby Project:**
 Once you have the gem installed, you can include it in your Ruby project by simply requiring it at the top of your Ruby file(s):
 ```
-require 'quake_log_parser'
+require 'quake_parser'
 ```
 
 ### **Usage:**
