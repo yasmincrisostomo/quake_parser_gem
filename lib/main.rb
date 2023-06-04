@@ -8,29 +8,29 @@ module QuakeParser
       @parser = QuakeParser::Parser.new(File.read(file_path))
     end
 
-    def execute
+    def parser_and_print
       @parser.parse_file
-      print_games
-      print_ranking
     end
-
-    def print_games
-      @parser.games.each { |game| puts game.convert_data_to_json if game }
+ 
+    def get_games
+      games_data = []
+      @parser.games.each { |game| games_data << game.convert_data_to_hash if game }
+      games_data
     end
-
-    def print_ranking
+ 
+    def get_ranking
       scores = Hash.new(0)
-
+ 
       @parser.games.each do |game|
         next unless game
-
+ 
         game.kills.each do |key, value|
           scores[key] += value
         end
       end
-
+ 
       ranking = scores.sort_by { |_key, value| -value }.to_h
-      puts "global_ranking: #{JSON.pretty_generate(ranking)}\n"
+      ranking
     end
   end
 end

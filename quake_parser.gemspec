@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |spec|
   spec.name          = 'quake_parser'
-  spec.version       = '0.1.1'
+  spec.version       = '0.1.3'
   spec.authors       = ['']
   spec.email         = ['crisostomyasmin@gmail.com']
   spec.summary       = 'A gem for parsing Quake log files.'
