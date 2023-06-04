@@ -30,32 +30,37 @@ To use QuakeParser, you'll need to supply it with a path to a log file:
 ```
 require 'quake_parser'
 
-QuakeParser.run('path_to_your_log_file.log')
+parsed_data = QuakeParser.run('path_to_your_log_file.log')
 ```
 
-This will read the log file and print out a report for each match, as well as a global player ranking. Here is an example of a typical output:
+This will read the log file and return a hash containing a report for each match and a global player ranking. Here is an example of the output:
 
 ```
 {
-  "game": 1,
-  "total_kills": 11,
-  "players": [
-    "Isgalamido",
-    "Mocinha"
+  games: [
+    {
+      "game": 1,
+      "total_kills": 11,
+      "players": [
+        "Isgalamido",
+        "Mocinha"
+      ],
+      "kills": {
+        "Isgalamido": -3,
+        "Mocinha": 0
+      },
+      "kills_by_means": {
+        "MOD_TRIGGER_HURT": 7,
+        "MOD_ROCKET_SPLASH": 3,
+        "MOD_FALLING": 1
+      }
+    },
+    # More game reports...
   ],
-  "kills": {
-    "Isgalamido": -3,
-    "Mocinha": 0
-  },
-  "kills_by_means": {
-    "MOD_TRIGGER_HURT": 7,
-    "MOD_ROCKET_SPLASH": 3,
-    "MOD_FALLING": 1
+  ranking: {
+    "Mocinha": 0,
+    "Isgalamido": -3
   }
-}
-global_ranking: {
-  "Mocinha": 0,
-  "Isgalamido": -3
 }
 ```
 
@@ -68,7 +73,7 @@ The output contains the following keys:
 - "kills_by_means": This object has each method of killing as a key, and the corresponding value is the number of kills using that method.
 
 ### Advanced Usage
-The QuakeParser gem provides a variety of methods to further interact with and manipulate game data. Here are some of them:
+The QuakeParser gem provides a variety of methods to further interact with and manipulate game data. These methods are not typically used directly but are part of the internal workings of the gem:
 
 - `add_player(name)`: Adds a new player to the game.
 - `update_player_name(old_name, new_name)`: Updates a player's name.
