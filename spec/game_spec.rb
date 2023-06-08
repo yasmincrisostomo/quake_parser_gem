@@ -1,4 +1,4 @@
-require_relative '../lib/main'
+require_relative '../lib/quake_parser.rb'
 
 RSpec.describe QuakeParser::Game do
   let(:game) { described_class.new(1) }

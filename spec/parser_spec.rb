@@ -1,4 +1,4 @@
-require_relative '../lib/main'
+require_relative '../lib/quake_parser.rb'
 
 RSpec.describe QuakeParser::Parser do
   let(:parser) { described_class.new(File.open('spec/fixtures/games.log')) }
