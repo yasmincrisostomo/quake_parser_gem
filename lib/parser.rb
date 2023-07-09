@@ -8,62 +8,65 @@ module QuakeParser
 
     WORLD = '1022'
 
-    def initialize(log)
-      @log = log
+    def initialize(log_file)
+      @log_file = log_file
       @games = []
     end
 
     def parse_file
-      @log.each_line { |line| parse_line(line) }
-    end
-
-    def start_game
-      @games << QuakeParser::Game.new(@games.size + 1)
-      @player_id_to_name_map = { WORLD => '<world>' }
+      @log_file.each_line { |line| parse_line(line) }
     end
 
     def parse_line(line)
       match = line.match(/\d+:\d+ \w+:/)
       return unless match
 
-      task = match.string.split(' ')[1]
+      command = match.string.split[1]
       data = match.post_match.strip
-      parse_task(task, data)
+      parse_command(command, data)
     end
 
-    def parse_task(task, data)
-      case task
+    def parse_command(command, data)
+      case command
       when "InitGame:"
         start_game
       when "ClientUserinfoChanged:"
-        parse_update(data)
+        parse_update_player(data)
       when "Kill:"
         parse_kill(data)
       when "ClientDisconnect:"
-        @player_id_to_name_map[data.match(/\d+/).to_s] = nil
+        @id_to_player_name[data] = nil
       end
     end
 
-    def parse_update(data)
+     def start_game
+      game_id = @games.size + 1
+      @games << QuakeParser::Game.new(game_id)
+      @id_to_player_name = { 
+        WORLD => '<world>' 
+      }
+    end
+
+    def parse_update_player(data)
       id = data.match(/\d+/).to_s
       post_id = data.match(/\d+/).post_match.to_s
       name = post_id.match(/\\.*?\\/).to_s[1..-2]
 
-      if @player_id_to_name_map[id]
-        @games.last.update_player_name(@player_id_to_name_map[id], name)
+      if @id_to_player_name[id]
+        @games.last.update_player_name(@id_to_player_name[id], name)
       else
         @games.last.add_player(name)
       end
-      @player_id_to_name_map[id] = name
+      @id_to_player_name[id] = name
     end
 
     def parse_kill(data)
-      killer, killed, mod = data.match(/\d+ \d+ \d+/).to_s.split(" ")
+      killer, killed, death_cause = data.match(/\d+ \d+ \d+/).to_s.split
 
       if killer == WORLD
-        @games.last.decrement_kill(@player_id_to_name_map[killed], mod)
+        @games.last.decrement_kill(@id_to_player_name[killed], death_cause)
       else
-        @games.last.increment_kill(@player_id_to_name_map[killer], mod)
+        @games.last.increment_kill(@id_to_player_name[killer], death_cause)
       end
     end
   end

@@ -17,8 +17,8 @@ module QuakeParser
       '28' => 'MOD_GRAPPLE'
     }
 
-    def initialize(game)
-      @game = game
+    def initialize(game_id)
+      @game_id = game_id
       @total_kills = 0
       @players = []
       @kills = Hash.new(0)
@@ -35,21 +35,21 @@ module QuakeParser
       @players[@players.index(old_name)] = new_name
     end
 
-    def increment_kill(killer, mod = '0')
+    def increment_kill(killer, death_cause = '0')
       @total_kills += 1
       @kills[killer] += 1
-      @kills_by_means[DEATH_CAUSES[mod]] += 1
+      @kills_by_means[DEATH_CAUSES[death_cause]] += 1
     end
 
-    def decrement_kill(killed, mod = '0')
+    def decrement_kill(killed, death_cause = '0')
       @total_kills += 1
       @kills[killed] -= 1
-      @kills_by_means[DEATH_CAUSES[mod]] += 1
+      @kills_by_means[DEATH_CAUSES[death_cause]] += 1
     end
 
     def convert_data_to_hash
       {
-        'game' => @game,
+        'game_id' => @game_id,
         'total_kills' => @total_kills,
         'players' => @players,
         'kills' => @kills,
