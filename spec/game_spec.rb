@@ -62,7 +62,7 @@ RSpec.describe QuakeParser::Game do
     it 'converts the data to JSON' do
       expected_json = <<~JSON.strip
         {
-          "game": 1,
+          "game_id": 1,
           "total_kills": 1,
           "players": [
             "Player 1"

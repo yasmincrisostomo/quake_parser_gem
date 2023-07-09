@@ -40,7 +40,7 @@ RSpec.describe QuakeParser::Parser do
   describe '#parse_command' do
     before do
       allow_any_instance_of(described_class).to receive(:start_game)
-      allow_any_instance_of(described_class).to receive(:parse_update_player)
+      allow_any_instance_of(described_class).to receive(:parse_player_info)
       allow_any_instance_of(described_class).to receive(:parse_kill)
     end
 
@@ -50,7 +50,7 @@ RSpec.describe QuakeParser::Parser do
       parser.parse_command('Kill:', '1022 2 22: <world> killed Isgalamido by MOD_TRIGGER_HURT')
 
       expect(parser).to have_received(:start_game).once
-      expect(parser).to have_received(:parse_update_player).once.with('2 n\Isgalamido\t\0\tred\t0\t0')
+      expect(parser).to have_received(:parse_player_info).once.with('2 n\Isgalamido\t\0\tred\t0\t0')
       expect(parser).to have_received(:parse_kill).once.with('1022 2 22: <world> killed Isgalamido by MOD_TRIGGER_HURT')
     end
   end

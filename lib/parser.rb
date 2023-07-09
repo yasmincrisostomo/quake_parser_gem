@@ -6,7 +6,8 @@ module QuakeParser
   class Parser
     attr_reader :games
 
-    WORLD = '1022'
+    WORLD_ID = '1022'
+    WORLD_NAME = '<world>'
 
     def initialize(log_file)
       @log_file = log_file
@@ -31,43 +32,48 @@ module QuakeParser
       when "InitGame:"
         start_game
       when "ClientUserinfoChanged:"
-        parse_update_player(data)
+        parse_player_info(data)
       when "Kill:"
         parse_kill(data)
       when "ClientDisconnect:"
-        @id_to_player_name[data] = nil
+        disconnect_player(data)
       end
     end
 
      def start_game
       game_id = @games.size + 1
       @games << QuakeParser::Game.new(game_id)
-      @id_to_player_name = { 
-        WORLD => '<world>' 
-      }
+      @id_to_player_name = { WORLD_ID => WORLD_NAME }
     end
 
-    def parse_update_player(data)
+    def parse_player_info(data)
       id = data.match(/\d+/).to_s
       post_id = data.match(/\d+/).post_match.to_s
-      name = post_id.match(/\\.*?\\/).to_s[1..-2]
+      player_name = post_id.match(/\\.*?\\/).to_s[1..-2]
 
       if @id_to_player_name[id]
-        @games.last.update_player_name(@id_to_player_name[id], name)
+        @games.last.update_player_name(@id_to_player_name[id], player_name)
       else
-        @games.last.add_player(name)
+        @games.last.add_player(player_name)
       end
-      @id_to_player_name[id] = name
+
+      @id_to_player_name[id] = player_name
     end
 
     def parse_kill(data)
-      killer, killed, death_cause = data.match(/\d+ \d+ \d+/).to_s.split
+      match = data.match(/\d+ \d+ \d+/).to_s
+      killer_id, killed_id, death_cause = match.split
 
-      if killer == WORLD
-        @games.last.decrement_kill(@id_to_player_name[killed], death_cause)
+      if killer_id == WORLD_ID
+        @games.last.decrement_kill(@id_to_player_name[killed_id], death_cause)
       else
-        @games.last.increment_kill(@id_to_player_name[killer], death_cause)
+        @games.last.increment_kill(@id_to_player_name[killer_id], death_cause)
       end
+    end
+
+    def disconnect_player(data)
+      player_id = data.match(/\d+/).to_s
+      @id_to_player_name[player_id] = nil
     end
   end
 end
