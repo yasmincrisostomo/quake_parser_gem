@@ -1,8 +1,7 @@
 PATH
   remote: .
   specs:
-    quake_parser (0.1.1)
-      json (~> 2.5)
+    quake_parser (0.1.4)
 
 GEM
   remote: https://rubygems.org/

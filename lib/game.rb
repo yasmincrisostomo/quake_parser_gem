@@ -1,7 +1,4 @@
 # frozen_string_literal: true
-
-require 'json'
-
 module QuakeParser
   class Game
     attr_reader :kills

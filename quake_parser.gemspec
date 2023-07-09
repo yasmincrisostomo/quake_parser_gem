@@ -10,7 +10,6 @@ Gem::Specification.new do |spec|
   spec.homepage      = 'https://github.com/yasmincrisostomo/quake_parser'
   spec.license       = 'MIT'
 
-  spec.add_dependency 'json', '~> 2.5'
   spec.add_development_dependency 'rspec', '~> 3.0'
 
   spec.files         = Dir["lib/**/*.rb"]

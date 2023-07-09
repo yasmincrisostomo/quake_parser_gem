@@ -1,7 +1,4 @@
 # frozen_string_literal: true
-
-require_relative 'game'
-
 module QuakeParser
   class Parser
     attr_reader :games
@@ -42,7 +39,7 @@ module QuakeParser
 
      def start_game
       game_id = @games.size + 1
-      @games << QuakeParser::Game.new(game_id)
+      @games << Game.new(game_id)
       @id_to_player_name = { WORLD_ID => WORLD_NAME }
     end
 
