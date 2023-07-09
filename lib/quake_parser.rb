@@ -14,7 +14,7 @@ module QuakeParser
     end
 
     def get_games
-      parser.games.map(&:convert_data_to_hash).compact
+      parser.games.map(&:convert_data_to_hash)
     end
 
     def get_ranking

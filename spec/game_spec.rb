@@ -52,32 +52,5 @@ RSpec.describe QuakeParser::Game do
       expect(game.kills).to eq({ 'Player 1' => 0 })
     end
   end
-
-  describe '#convert_data_to_json' do
-    before do
-      game.add_player('Player 1')
-      game.increment_kill('Player 1')
-    end
-
-    it 'converts the data to JSON' do
-      expected_json = <<~JSON.strip
-        {
-          "game_id": 1,
-          "total_kills": 1,
-          "players": [
-            "Player 1"
-          ],
-          "kills": {
-            "Player 1": 1
-          },
-          "kills_by_means": {
-            "MOD_UNKNOWN": 1
-          }
-        }
-      JSON
-
-      expect(JSON.parse(game.convert_data_to_json)).to eq(JSON.parse(expected_json))
-    end
-  end
 end
 

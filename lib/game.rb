@@ -4,7 +4,7 @@ require 'json'
 
 module QuakeParser
   class Game
-    attr_reader :kills, :kills_by_means, :players
+    attr_reader :kills
 
     DEATH_CAUSES = {
       '0' => 'MOD_UNKNOWN', '1' => 'MOD_SHOTGUN', '2' => 'MOD_GAUNTLET', '3' => 'MOD_MACHINEGUN',
@@ -35,13 +35,13 @@ module QuakeParser
       @players[@players.index(old_name)] = new_name
     end
 
-    def increment_kill(killer, death_cause = '0')
+    def increment_kill(killer, death_cause)
       @total_kills += 1
       @kills[killer] += 1
       @kills_by_means[DEATH_CAUSES[death_cause]] += 1
     end
 
-    def decrement_kill(killed, death_cause = '0')
+    def decrement_kill(killed, death_cause)
       @total_kills += 1
       @kills[killed] -= 1
       @kills_by_means[DEATH_CAUSES[death_cause]] += 1
@@ -55,10 +55,6 @@ module QuakeParser
         'kills' => @kills,
         'kills_by_means' => @kills_by_means
       }
-    end
-
-    def convert_data_to_json
-      JSON.pretty_generate(convert_data_to_hash)
     end
   end
 end
