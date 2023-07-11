@@ -37,7 +37,7 @@ module QuakeParser
       end
     end
 
-     def start_game
+    def start_game
       game_id = @games.size + 1
       @games << Game.new(game_id)
       @id_to_player_name = { WORLD_ID => WORLD_NAME }

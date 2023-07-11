@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 module QuakeParser
   class Game
-    attr_reader :kills
+    attr_reader :kills, :kills_by_means, :players
 
     DEATH_CAUSES = {
       '0' => 'MOD_UNKNOWN', '1' => 'MOD_SHOTGUN', '2' => 'MOD_GAUNTLET', '3' => 'MOD_MACHINEGUN',

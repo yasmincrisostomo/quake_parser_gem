@@ -33,7 +33,7 @@ RSpec.describe QuakeParser::Game do
   describe '#increment_kill' do
     before do
       game.add_player('Player 1')
-      game.increment_kill('Player 1')
+      game.increment_kill('Player 1', '4')
     end
 
     it 'increments the kill' do
@@ -44,12 +44,13 @@ RSpec.describe QuakeParser::Game do
   describe '#decrement_kill' do
     before do
       game.add_player('Player 1')
-      game.increment_kill('Player 1')
-      game.decrement_kill('Player 1')
+      game.increment_kill('Player 1', '4')
+      game.decrement_kill('Player 1', '4')
     end
 
     it 'decrements the kill' do
       expect(game.kills).to eq({ 'Player 1' => 0 })
+      expect(game.kills_by_means).to eq({ "MOD_GRENADE" => 2 })
     end
   end
 end

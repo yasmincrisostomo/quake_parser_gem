@@ -10,14 +10,14 @@ module QuakeParser
 
       @parser = Parser.new(File.read(file_path))
       parser.parse_file
-      { games: get_games, ranking: get_ranking }
+      { games: games, ranking: ranking }
     end
 
-    def get_games
+    def games
       parser.games.map(&:convert_data_to_hash)
     end
 
-    def get_ranking
+    def ranking
       scores = Hash.new(0)
 
       parser.games.each do |game|
